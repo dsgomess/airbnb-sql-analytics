@@ -1,5 +1,4 @@
 data/
-
-*.pbix
+*.csv
 venv/
 __pycache__/
