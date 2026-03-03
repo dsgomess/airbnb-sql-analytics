@@ -1,0 +1,101 @@
+# 🏠 Airbnb Data Analytics – SQL Server + Python + Power BI
+
+## 📌 Visão Geral do Projeto
+
+Este projeto demonstra a construção de um pipeline completo de dados utilizando o dataset público do Inside Airbnb.
+
+O objetivo foi transformar arquivos CSV brutos em um ambiente analítico estruturado, pronto para consumo em ferramentas de Business Intelligence.
+
+O projeto segue uma arquitetura de dados em **3 camadas**:
+
+1. **Camada Raw (Staging)**
+2. **Camada Modelada (Tabelas Tipadas)**
+3. **Camada Analítica (Views para BI)**
+
+---
+
+## 🗂 Dataset
+
+Fonte: Inside Airbnb (dataset público)
+
+Arquivos utilizados:
+- listings.csv
+- calendar.csv
+- reviews.csv
+
+---
+
+## 🏗 Arquitetura do Projeto
+
+### 🔹 1️⃣ Camada Raw (Staging)
+
+Os arquivos CSV foram importados para o SQL Server utilizando `BULK INSERT`.
+
+Tabelas staging criadas:
+- `stg_listings`
+- `stg_calendar`
+- `stg_reviews`
+
+Todas as colunas foram inicialmente definidas como `NVARCHAR(MAX)` para evitar conflitos de tipagem durante a ingestão.
+
+---
+
+### 🔹 2️⃣ Camada Modelada (Transformação e Tipagem)
+
+Os dados foram transformados utilizando `TRY_CAST`, limpeza de aspas e aplicação de regras de negócio.
+
+Tabelas finais criadas:
+- `listings`
+- `calendar`
+- `reviews`
+
+Transformações realizadas:
+
+- Remoção de aspas em campos numéricos
+- Conversão de `price` para `DECIMAL`
+- Conversão de disponibilidade ('t'/'f') para `BIT`
+- Tratamento de quebras de linha invisíveis
+- Padronização de tipos numéricos
+- Tratamento de valores nulos
+
+---
+
+### 🔹 3️⃣ Camada Analítica (View para BI)
+
+Foi criada a view:
+
+- `vw_listings_dashboard`
+
+
+A view vw_listings_dashboard consolida as principais métricas analíticas do projeto, integrando dados das tabelas listings, reviews e calendar.
+A view retorna:
+
+- ID do imóvel
+- Bairro
+- Tipo de propriedade
+- Tipo de quarto
+- Preço
+- Avaliação média
+- Total de reviews
+- Data da última review
+- Total de dias monitorados
+- Total de dias disponíveis
+- Taxa de disponibilidade (%)
+
+A view foi projetada para consumo direto no Power BI.
+
+---
+
+## 🔄 Processo de ETL
+
+### 🐍 Pré-processamento em Python
+
+Antes da carga no SQL Server, foi realizado tratamento utilizando Pandas:
+
+- Remoção de quebras de linha internas
+- Correção de encoding
+- Remoção de separador de milhar no preço
+- Padronização de delimitadores
+- Seleção de colunas relevantes
+- Exportação de arquivos CSV tratados
+
